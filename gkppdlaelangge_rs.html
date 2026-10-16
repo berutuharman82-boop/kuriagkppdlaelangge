@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gereja GKPPD Lae Langge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @media print {
+            body * { visibility: hidden; }
+            .printable-area, .printable-area * { visibility: visible; }
+            .printable-area { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 20px; box-shadow: none; border: none; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 no-print">
+        <i class="fa-solid fa-circle-check text-xl"></i>
+        <div>
+            <h4 class="font-bold text-sm">Berhasil!</h4>
+            <p id="toast-message" class="text-xs">Aksi berhasil dilakukan.</p>
+        </div>
+    </div>
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                <div class="w-12 h-12 rounded-full overflow-hidden bg-blue-900 flex items-center justify-center text-white shadow-md border-2 border-amber-400">
+                    <img id="app-logo-img" src="https://placehold.co/100x100/1e293b/fbbf24?text=LOGO" alt="Logo GKPPD" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">GKPPD Lae Langge</h1>
+                    <p class="text-xs text-slate-500">Gereja Kristen Protestan Pakpak Dairi</p>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="hidden md:flex items-center gap-1 font-medium text-sm">
+                <button onclick="switchTab('home')" id="nav-home" class="px-3 py-2 rounded-lg text-amber-700 bg-amber-50 transition hover:bg-amber-100 font-semibold">Home</button>
+                <button onclick="switchTab('statistik')" id="nav-statistik" class="px-3 py-2 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-slate-100 transition">Statistik</button>
+                <button onclick="switchTab('baptis')" id="nav-baptis" class="px-3 py-2 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-slate-100 transition">Baptis</button>
+                <button onclick="switchTab('keuangan')" id="nav-keuangan" class="px-3 py-2 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-slate-100 transition">Keuangan</button>
+                <button onclick="switchTab('surat')" id="nav-surat" class="px-3 py-2 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-slate-100 transition">Surat</button>
+                <button onclick="openAdminModal()" id="nav-admin" class="ml-2 px-3 py-2 rounded-lg bg-blue-900 text-white hover:bg-blue-800 transition flex items-center gap-1 text-xs font-bold">
+                    <i class="fa-solid fa-lock" id="admin-icon-lock"></i> <span id="admin-btn-text">Admin Panel</span>
+                </button>
+            </nav>
+
+            <button class="md:hidden p-2 text-slate-600 hover:text-slate-900 focus:outline-none" onclick="toggleMobileMenu()">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-amber-700 bg-amber-50">Home</button>
+            <button onclick="switchTab('statistik'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-slate-600 hover:bg-slate-100">Statistik Jemaat</button>
+            <button onclick="switchTab('baptis'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-slate-600 hover:bg-slate-100">Baptis</button>
+            <button onclick="switchTab('keuangan'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-slate-600 hover:bg-slate-100">Keuangan</button>
+            <button onclick="switchTab('surat'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-slate-600 hover:bg-slate-100">Surat</button>
+            <button onclick="openAdminModal(); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-blue-900 bg-blue-50 font-bold"><i class="fa-solid fa-lock mr-2"></i> Admin Panel</button>
+        </div>
+    </header>
+
+    <section class="relative bg-slate-900 text-white py-24 sm:py-32 overflow-hidden no-print">
+        <div class="absolute inset-0 z-0">
+            <img src="https://placehold.co/1920x800/1e293b/475569?text=Gereja+GKPPD+Lae+Langge" alt="Gereja GKPPD Lae Langge" class="w-full h-full object-cover opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6 text-white drop-shadow-md">
+                "Njuah-Juah" Selamat Datang di <br><span class="text-amber-400">Gereja GKPPD Lae Langge</span>
+            </h2>
+            <p class="text-sm sm:text-base text-slate-200 max-w-2xl mx-auto italic mb-8 leading-relaxed">
+                "Selamat datang di tempat persekutuan dan tempat beribadah bagi setiap jiwa yang haus akan kebenaran Firman Tuhan."
+            </p>
+        </div>
+    </section>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+
+        <!-- TAB HOME -->
+        <div id="tab-home" class="tab-content space-y-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Berita Terbaru -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+                            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-newspaper text-amber-600"></i> Berita Terbaru
+                            </h3>
+                            <button onclick="openTambahBeritaModal()" id="btn-tambah-berita" class="hidden text-xs text-emerald-600 font-bold hover:bg-emerald-50 px-2 py-1 rounded transition"><i class="fa-solid fa-plus"></i> Tambah Berita</button>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mb-3 italic">Klik pada berita untuk membaca selengkapnya.</p>
+                        <div id="container-berita" class="space-y-4"></div>
+                    </div>
+                </div>
+
+                <!-- Jadwal Ibadah -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+                            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-days text-amber-600"></i> Jadwal Ibadah
+                            </h3>
+                            <button onclick="openTambahJadwalModal()" id="btn-tambah-jadwal" class="hidden text-xs text-emerald-600 font-bold hover:bg-emerald-50 px-2 py-1 rounded transition"><i class="fa-solid fa-plus"></i> Tambah Jadwal</button>
+                        </div>
+                        <div id="container-jadwal" class="space-y-4 text-sm"></div>
+                    </div>
+                </div>
+
+                <!-- Renungan Harian -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+                            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-book-bible text-amber-600"></i> Renungan Harian
+                            </h3>
+                            <button onclick="openEditRenunganModal()" id="btn-edit-renungan" class="hidden text-xs text-blue-600 font-bold hover:bg-blue-50 px-2 py-1 rounded transition"><i class="fa-solid fa-pen"></i> Edit Renungan</button>
+                        </div>
+                        <div id="container-renungan" class="space-y-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB STATISTIK JEMAAT -->
+        <div id="tab-statistik" class="tab-content hidden space-y-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-amber-600"></i> Statistik Jemaat GKPPD Lae Langge
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-500">Ringkasan data demografi dan perkembangan jemaat secara periodik.</p>
+                </div>
+                <button onclick="openEditStatistikModal()" id="btn-edit-statistik" class="hidden px-4 py-2 bg-blue-900 text-white text-xs font-semibold rounded-xl hover:bg-blue-800 transition flex items-center gap-2">
+                    <i class="fa-solid fa-pen"></i> Update Data Statistik
+                </button>
+            </div>
+
+            <!-- Kartu Statistik Utama -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Total Jiwa Jemaat</p>
+                        <h3 id="stat-jiwa" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-house-chimney"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Kepala Keluarga (KK)</p>
+                        <h3 id="stat-kk" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-child"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Anak Sekolah Minggu</p>
+                        <h3 id="stat-asm" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Pemuda / Remaja</p>
+                        <h3 id="stat-pemuda" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistik Tambahan -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                    <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-filter text-amber-600 mr-2"></i> Kategori Jemaat Lainnya
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-center py-2 border-b border-slate-50">
+                            <span class="text-slate-600">Kaum Bapak</span>
+                            <span id="stat-bapak" class="font-bold text-slate-900">0 Orang</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-slate-50">
+                            <span class="text-slate-600">Kaum Ibu</span>
+                            <span id="stat-ibu" class="font-bold text-slate-900">0 Orang</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2">
+                            <span class="text-slate-600">Lansia (Sintua Pensiun / Senior)</span>
+                            <span id="stat-lansia" class="font-bold text-slate-900">0 Orang</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                    <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-water text-blue-900 mr-2"></i> Rekapitulasi Pelayanan Sakramen
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-center py-2 border-b border-slate-50">
+                            <span class="text-slate-600">Total Baptisan Kudus (Tahun Ini)</span>
+                            <span id="stat-baptis-tahun" class="font-bold text-blue-900">0 Jiwa</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-slate-50">
+                            <span class="text-slate-600">Sidi / Peneguhan Sidi</span>
+                            <span id="stat-sidi" class="font-bold text-blue-900">0 Orang</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2">
+                            <span class="text-slate-600">Pemberkatan Pernikahan Kudus</span>
+                            <span id="stat-nikah" class="font-bold text-blue-900">0 Pasang</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB BAPTIS -->
+        <div id="tab-baptis" class="tab-content hidden space-y-6">
+            <div id="locked-baptis" class="hidden bg-amber-50 border border-amber-200 p-8 rounded-2xl text-center space-y-3 max-w-xl mx-auto my-12">
+                <i class="fa-solid fa-lock text-3xl text-amber-600"></i>
+                <h3 class="font-bold text-slate-900 text-lg">Akses Terbatas</h3>
+                <p class="text-xs text-slate-600">Menu Surat Permohonan Baptis hanya dapat diakses setelah <b class="text-amber-700">Login sebagai Admin</b>.</p>
+                <button onclick="openAdminModal()" class="px-4 py-2 bg-blue-900 text-white rounded-xl text-xs font-semibold shadow">Login Admin Sekarang</button>
+            </div>
+            <div id="content-baptis" class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 max-w-4xl mx-auto">
+                <div class="mb-6 pb-4 border-b border-slate-100">
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-water text-amber-600"></i> Surat Permohonan Baptis
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Isi formulir pendaftaran sakramen baptis kudus di bawah ini untuk mencetak dokumen.</p>
+                </div>
+                <form onsubmit="handleBaptisSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Nama Lengkap Anak / Peserta Baptis</label>
+                        <input type="text" id="baptis-nama" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Nama lengkap">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Tempat Lahir</label>
+                        <input type="text" id="baptis-tempat-lahir" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Contoh: Sidikalang">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Tanggal Lahir</label>
+                        <input type="date" id="baptis-tgl-lahir" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Nama Ayah</label>
+                        <input type="text" id="baptis-ayah" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Nama Ayah Kandung">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Nama Ibu</label>
+                        <input type="text" id="baptis-ibu" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Nama Ibu Kandung">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Nomor Telepon / WhatsApp</label>
+                        <input type="tel" id="baptis-telp" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="08xxxxxxxxxx">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Alamat Lengkap</label>
+                        <textarea id="baptis-alamat" rows="2" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Alamat tempat tinggal"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Tanggal Rencana Permohonan</label>
+                        <input type="date" id="baptis-tgl-rencana" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50">
+                    </div>
+                    <div class="md:col-span-2 pt-4">
+                        <button type="submit" class="w-full py-3.5 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-print"></i> Generate & Cetak Surat Permohonan Baptis
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB KEUANGAN -->
+        <div id="tab-keuangan" class="tab-content hidden space-y-8">
+            <div id="locked-keuangan" class="hidden bg-amber-50 border border-amber-200 p-8 rounded-2xl text-center space-y-3 max-w-xl mx-auto my-12">
+                <i class="fa-solid fa-lock text-3xl text-amber-600"></i>
+                <h3 class="font-bold text-slate-900 text-lg">Akses Terbatas</h3>
+                <p class="text-xs text-slate-600">Menu Keuangan hanya dapat diakses setelah <b class="text-amber-700">Login sebagai Admin</b>.</p>
+                <button onclick="openAdminModal()" class="px-4 py-2 bg-blue-900 text-white rounded-xl text-xs font-semibold shadow">Login Admin Sekarang</button>
+            </div>
+            <div id="content-keuangan" class="space-y-8">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Keuangan: Pemasukan dan Pengeluaran</h2>
+                        <p class="text-xs sm:text-sm text-slate-500">Laporan transparan kas keuangan jemaat GKPPD Lae Langge.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openModalKeuangan()" class="px-4 py-2.5 bg-blue-900 text-white text-xs font-semibold rounded-xl hover:bg-blue-800 transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-plus"></i> Tambah Transaksi
+                        </button>
+                        <button onclick="openCetakKeuanganModal()" class="px-4 py-2.5 bg-amber-600 text-white text-xs font-semibold rounded-xl hover:bg-amber-700 transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-file-pdf"></i> Cetak Laporan PDF
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Saldo Awal Bulan</p>
+                        <h3 class="text-2xl font-bold text-slate-900 mt-2">Rp 1.500.000</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <p class="text-xs font-semibold text-emerald-600 uppercase">Total Pemasukan</p>
+                        <h3 id="stat-pemasukan" class="text-2xl font-bold text-emerald-600 mt-2">Rp 0</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <p class="text-xs font-semibold text-rose-600 uppercase">Total Pengeluaran</p>
+                        <h3 id="stat-pengeluaran" class="text-2xl font-bold text-rose-600 mt-2">Rp 0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
+                    <h3 class="font-bold text-slate-900 mb-4">Transaksi Terkini</h3>
+                    <table class="w-full text-left text-xs sm:text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500">
+                                <th class="pb-3 font-semibold">Tanggal</th>
+                                <th class="pb-3 font-semibold">Keterangan</th>
+                                <th class="pb-3 font-semibold">Jenis</th>
+                                <th class="pb-3 font-semibold">Jumlah</th>
+                                <th class="pb-3 font-semibold">Kategori</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabel-transaksi" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB SURAT -->
+        <div id="tab-surat" class="tab-content hidden space-y-6">
+            <div id="locked-surat" class="hidden bg-amber-50 border border-amber-200 p-8 rounded-2xl text-center space-y-3 max-w-xl mx-auto my-12">
+                <i class="fa-solid fa-lock text-3xl text-amber-600"></i>
+                <h3 class="font-bold text-slate-900 text-lg">Akses Terbatas</h3>
+                <p class="text-xs text-slate-600">Menu Pembuatan Surat hanya dapat diakses setelah <b class="text-amber-700">Login sebagai Admin</b>.</p>
+                <button onclick="openAdminModal()" class="px-4 py-2 bg-blue-900 text-white rounded-xl text-xs font-semibold shadow">Login Admin Sekarang</button>
+            </div>
+            <div id="content-surat" class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 max-w-3xl mx-auto">
+                <div class="mb-6 pb-4 border-b border-slate-100">
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-file-lines text-amber-600"></i> Layanan Pembuatan Surat Keterangan
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Pilih jenis surat gereja dan lengkapi data untuk dicetak.</p>
+                </div>
+
+                <form onsubmit="handleSuratSubmit(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Jenis Surat Keterangan</label>
+                        <select id="surat-jenis" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50">
+                            <option value="Surat Keterangan Anggota Jemaat Aktif">Surat Keterangan Anggota Jemaat Aktif</option>
+                            <option value="Surat Pindah Gereja / Anggota">Surat Pindah Gereja / Anggota</option>
+                            <option value="Surat Rekomendasi Nikah Gereja">Surat Rekomendasi Nikah Gereja</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Nama Lengkap Pemohon</label>
+                        <input type="text" id="surat-nama" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Nama lengkap">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Nama Kepala Keluarga</label>
+                        <input type="text" id="surat-ortu" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Kepala keluarga">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Alamat Jemaat</label>
+                        <textarea id="surat-alamat" rows="2" required class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Alamat lengkap"></textarea>
+                    </div>
+                    <div class="pt-3">
+                        <button type="submit" class="w-full py-3.5 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-print"></i> Generate & Cetak Surat Keterangan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Detail Baca Berita Selengkapnya -->
+    <div id="modal-detail-berita" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden no-print p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-slate-100 bg-slate-50">
+                <span id="detail-berita-tanggal" class="text-xs text-amber-700 font-bold bg-amber-50 px-2.5 py-1 rounded-md"></span>
+                <button onclick="closeDetailBerita()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-rose-100 hover:text-rose-600 text-slate-600 flex items-center justify-center transition font-bold">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4 flex-grow">
+                <img id="detail-berita-img" src="" class="w-full h-56 rounded-xl object-cover shadow-sm border border-slate-100" alt="Berita">
+                <h3 id="detail-berita-judul" class="text-xl font-bold text-slate-900 leading-snug"></h3>
+                <div id="detail-berita-isi" class="text-sm text-slate-600 leading-relaxed whitespace-pre-line bg-slate-50 p-5 rounded-xl border border-slate-100 shadow-inner"></div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex gap-3">
+                <button onclick="closeDetailBerita()" class="w-full py-3 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-md">
+                    <i class="fa-solid fa-arrow-left"></i> Tutup & Kembali ke Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cetak Laporan Keuangan PDF -->
+    <div id="modal-cetak-keuangan" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 p-8 space-y-6 max-h-[95vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-200 no-print">
+                <h3 class="font-bold text-slate-900 flex items-center gap-2"><i class="fa-solid fa-file-pdf text-amber-600"></i> Cetak Laporan Keuangan Jemaat</h3>
+                <button onclick="closeCetakKeuanganModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <div class="printable-area bg-white p-8 border border-slate-300 rounded-xl text-slate-900 text-sm space-y-6 shadow-sm">
+                <div class="flex items-center gap-4 border-b-4 border-double border-slate-800 pb-4 text-center">
+                    <img id="print-keu-logo" src="https://placehold.co/80x80/1e293b/fbbf24?text=LOGO" class="w-16 h-16 object-cover rounded-full" alt="Logo">
+                    <div class="flex-grow">
+                        <h2 class="text-base font-extrabold uppercase tracking-wide">Gereja Kristen Protestan Pakpak Dairi (GKPPD)</h2>
+                        <h1 class="text-lg font-extrabold uppercase text-blue-900">Lae Langge</h1>
+                        <p class="text-[11px] text-slate-600">Laporan Resmi Kas Keuangan Jemaat Periode <span id="print-keu-periode"></span></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 text-center py-2 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div>
+                        <p class="text-[11px] text-slate-500 uppercase font-semibold">Saldo Awal</p>
+                        <p class="font-bold text-slate-900">Rp 1.500.000</p>
+                    </div>
+                    <div>
+                        <p class="text-[11px] text-emerald-600 uppercase font-semibold">Total Pemasukan</p>
+                        <p id="print-tot-pemasukan" class="font-bold text-emerald-600">Rp 0</p>
+                    </div>
+                    <div>
+                        <p class="text-[11px] text-rose-600 uppercase font-semibold">Total Pengeluaran</p>
+                        <p id="print-tot-pengeluaran" class="font-bold text-rose-600">Rp 0</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-xs uppercase text-slate-700 mb-2">Rincian Transaksi Keuangan</h4>
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-300 bg-slate-100 text-slate-700">
+                                <th class="p-2">Tanggal</th>
+                                <th class="p-2">Keterangan</th>
+                                <th class="p-2">Jenis</th>
+                                <th class="p-2">Kategori</th>
+                                <th class="p-2 text-right">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody id="print-tabel-transaksi" class="divide-y divide-slate-200"></tbody>
+                    </table>
+                </div>
+
+                <div class="pt-8 flex justify-between items-end">
+                    <div class="text-center text-xs">
+                        <p>Mengetahui,</p>
+                        <p class="font-bold">Pendeta Resort</p>
+                        <div class="h-16"></div>
+                        <p class="font-bold underline">( Pdt. Andi Ginting, S.Th )</p>
+                    </div>
+                    <div class="text-center text-xs">
+                        <p>Lae Langge, <span id="print-keu-tanggal"></span></p>
+                        <p class="font-bold">Bendahara Jemaat</p>
+                        <div class="h-16"></div>
+                        <p class="font-bold underline">( Harman Berutu, SIP )</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 pt-4 no-print border-t border-slate-100">
+                <button onclick="closeCetakKeuanganModal()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs">Tutup</button>
+                <button onclick="window.print()" class="flex-1 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl shadow text-xs flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-print"></i> Cetak PDF / Print Laporan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Preview Cetak Surat Keterangan -->
+    <div id="modal-cetak-surat" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 p-8 space-y-6 max-h-[95vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-200 no-print">
+                <h3 class="font-bold text-slate-900 flex items-center gap-2"><i class="fa-solid fa-file-invoice text-blue-900"></i> Preview Surat Resmi</h3>
+                <button onclick="closeCetakModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <div class="printable-area bg-white p-8 border border-slate-300 rounded-xl text-slate-900 text-sm space-y-6 shadow-sm">
+                <div class="flex items-center gap-4 border-b-4 border-double border-slate-800 pb-4 text-center">
+                    <img id="print-logo" src="https://placehold.co/80x80/1e293b/fbbf24?text=LOGO" class="w-16 h-16 object-cover rounded-full" alt="Logo">
+                    <div class="flex-grow">
+                        <h2 class="text-base font-extrabold uppercase tracking-wide">Gereja Kristen Protestan Pakpak Dairi (GKPPD)</h2>
+                        <h1 class="text-lg font-extrabold uppercase text-blue-900">Lae Langge, Resort Singgabur  </h1>
+                        <p class="text-[11px] text-slate-600">Alamat: Lae Langge,  Kec. Desa Sitellu Tali Urang Julu, Kab. Pakpak Bharat</p>
+                    </div>
+                </div>
+
+                <div class="text-center space-y-1 pt-2">
+                    <h3 id="print-judul-surat" class="font-bold uppercase underline text-base">SURAT KETERANGAN</h3>
+                    <p class="text-xs text-slate-600">Nomor: 042 / GKPPD-LL / IV / 2026</p>
+                </div>
+
+                <div class="space-y-4 text-justify leading-relaxed pt-2">
+                    <p>Majelis Jemaat Gereja GKPPD Lae Langge dengan ini menerangkan bahwa:</p>
+                    <table class="w-full space-y-2 pl-4">
+                        <tr><td class="w-40 font-semibold">Nama Lengkap</td><td>: <span id="print-nama" class="font-bold"></span></td></tr>
+                        <tr><td class="font-semibold">Kepala Keluarga</td><td>: <span id="print-ortu"></span></td></tr>
+                        <tr><td class="font-semibold">Alamat</td><td>: <span id="print-alamat"></span></td></tr>
+                    </table>
+                    <p>Adalah benar merupakan anggota jemaat aktif yang terdaftar dalam persekutuan ibadah di Gereja GKPPD Lae Langge.</p>
+                    <p>Demikian surat keterangan ini diperbuat dengan benar dan dapat dipergunakan sebagaimana mestinya.</p>
+                </div>
+
+                <div class="pt-8 flex justify-between items-end">
+                    <div class="text-center text-xs">
+                        <p>Mengetahui,</p>
+                        <p class="font-bold">Pendeta Resort </p>
+                        <div class="h-16"></div>
+                        <p class="font-bold underline">( Pdt. Andi Ginting, S.Th )</p>
+                    </div>
+                    <div class="text-center text-xs">
+                        <p>Lae Langge, <span id="print-tanggal-surat"></span></p>
+                        <p class="font-bold">Guru Kuria</p>
+                        <div class="h-16"></div>
+                        <p class="font-bold underline">( St. Susiantono Tumangger )</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 pt-4 no-print border-t border-slate-100">
+                <button onclick="closeCetakModal()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs">Tutup</button>
+                <button onclick="window.print()" class="flex-1 py-3 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-xl shadow text-xs flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-print"></i> Cetak Dokumen Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Preview Cetak Surat Permohonan Baptis -->
+    <div id="modal-cetak-baptis" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 p-8 space-y-6 max-h-[95vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-200 no-print">
+                <h3 class="font-bold text-slate-900 flex items-center gap-2"><i class="fa-solid fa-water text-blue-900"></i> Preview Surat Permohonan Baptis</h3>
+                <button onclick="closeCetakBaptisModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <div class="printable-area bg-white p-8 border border-slate-300 rounded-xl text-slate-900 text-sm space-y-6 shadow-sm">
+                <div class="flex items-center gap-4 border-b-4 border-double border-slate-800 pb-4 text-center">
+                    <img id="print-baptis-logo" src="https://placehold.co/80x80/1e293b/fbbf24?text=LOGO" class="w-16 h-16 object-cover rounded-full" alt="Logo">
+                    <div class="flex-grow">
+                        <h2 class="text-base font-extrabold uppercase tracking-wide">Gereja Kristen Protestan Pakpak Dairi (GKPPD)</h2>
+                        <h1 class="text-lg font-extrabold uppercase text-blue-900">Lae Langge, Resort Singgabur </h1>
+                        <p class="text-[11px] text-slate-600">Alamat: Lae Langge,  Kec. Desa Sitellu Tali Urang Julu, Kab. Pakpak Bharat
+                    </div>
+                </div>
+
+                <div class="text-center space-y-1 pt-2">
+                    <h3 class="font-bold uppercase underline text-base">SURAT PERMOHONAN BAPTIS KUDUS</h3>
+                    <p class="text-xs text-slate-600">Nomor: BPT / GKPPD-LL / IV / 2026</p>
+                </div>
+
+                <div class="space-y-4 text-justify leading-relaxed pt-2">
+                    <p>Kepada Yth. Majelis Jemaat GKPPD Lae Langge,</p>
+                    <p>Dengan hormat, yang bertanda tangan di bawah ini orang tua / wali dari calon peserta baptis:</p>
+                    <table class="w-full space-y-2 pl-4">
+                        <tr><td class="w-44 font-semibold">Nama Anak / Peserta</td><td>: <span id="pb-nama" class="font-bold"></span></td></tr>
+                        <tr><td class="font-semibold">Tempat / Tanggal Lahir</td><td>: <span id="pb-tgl-lahir"></span></td></tr>
+                        <tr><td class="font-semibold">Nama Ayah</td><td>: <span id="pb-ayah"></span></td></tr>
+                        <tr><td class="font-semibold">Nama Ibu</td><td>: <span id="pb-ibu"></span></td></tr>
+                        <tr><td class="font-semibold">Alamat Tempat Tinggal</td><td>: <span id="pb-alamat"></span></td></tr>
+                        <tr><td class="font-semibold">Nomor Telepon / WA</td><td>: <span id="pb-telp"></span></td></tr>
+                        <tr><td class="font-semibold">Rencana Tanggal Baptis</td><td>: <span id="pb-tgl-rencana"></span></td></tr>
+                    </table>
+                    <p>Mengajukan permohonan kepada Majelis Jemaat agar anak / peserta tersebut di atas dapat menerima Pelayanan Sakramen Baptis Kudus di Gereja GKPPD Lae Langge.</p>
+                    <p>Demikian surat permohonan ini kami sampaikan dengan benar.</p>
+                </div>
+
+                <div class="pt-8 flex justify-between items-end">
+                    <div class="text-center text-xs">
+                        <p>Mengetahui / Menyetujui,</p>
+                        <p class="font-bold">Majelis Jemaat GKPPD</p>
+                        <div class="h-16"></div>
+                        <p class="font-bold underline">(  Pdt. Andi Ginting, S.Th )</p>
+                    </div>
+                    <div class="text-center text-xs">
+                        <p>Lae Langge, <span id="pb-tanggal-surat"></span></p>
+                        <p class="font-bold">Pemohon / Orang Tua</p>
+                        <div class="h-16"></div>
+                        <p class="font-bold underline">( <span id="pb-ttd-nama"></span> )</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 pt-4 no-print border-t border-slate-100">
+                <button onclick="closeCetakBaptisModal()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs">Tutup</button>
+                <button onclick="window.print()" class="flex-1 py-3 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-xl shadow text-xs flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-print"></i> Cetak Surat Baptis Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals Lainnya -->
+    <div id="modal-keuangan" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden no-print">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full mx-4 p-6 sm:p-8 space-y-6">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-wallet text-amber-600"></i> Tambah Transaksi</h3>
+                <button onclick="closeModalKeuangan()" class="text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <form onsubmit="handleTambahTransaksi(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-2">Jenis</label>
+                    <select id="input-jenis" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50">
+                        <option value="Pemasukan">Pemasukan</option>
+                        <option value="Pengeluaran">Pengeluaran</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-2">Tanggal</label>
+                    <input type="date" id="input-tanggal" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-2">Keterangan</label>
+                    <input type="text" id="input-keterangan" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Keterangan transaksi">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-2">Jumlah (Rp)</label>
+                    <input type="number" id="input-jumlah" required min="1000" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Contoh: 50000">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-2">Kategori</label>
+                    <select id="input-kategori" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50">
+                        <option value="Operasional">Operasional</option>
+                        <option value="Kegiatan">Kegiatan</option>
+                        <option value="Persembahan">Persembahan</option>
+                        <option value="Pemeliharaan">Pemeliharaan</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-3 bg-blue-900 text-white font-semibold rounded-xl text-sm shadow">Simpan Transaksi</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-admin-login" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden no-print">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full mx-4 p-6 space-y-5">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900"><i class="fa-solid fa-lock text-blue-900 mr-2"></i> Login Admin</h3>
+                <button onclick="closeAdminModal()" class="text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-2">Password Admin</label>
+                <input type="password" id="admin-password-input" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50" placeholder="Password...">
+            </div>
+            <button onclick="verifyAdminLogin()" class="w-full py-3 bg-blue-900 text-white font-semibold rounded-xl text-sm">Masuk</button>
+        </div>
+    </div>
+
+    <div id="modal-admin-panel" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden no-print">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 p-6 space-y-6">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900">Panel Admin</h3>
+                <button onclick="closeAdminPanel()" class="text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="space-y-4 text-sm">
+                <div class="border border-slate-200 p-4 rounded-xl space-y-2">
+                    <p class="font-bold text-slate-800 text-xs">Ganti Logo Gereja</p>
+                    <input type="file" id="admin-logo-file" accept="image/*" class="w-full text-xs text-slate-500">
+                    <button onclick="saveAdminLogo()" class="px-4 py-2 bg-blue-900 text-white text-xs font-semibold rounded-lg">Simpan Logo</button>
+                </div>
+                <button onclick="logoutAdmin()" class="w-full py-2.5 bg-rose-600 text-white text-xs font-semibold rounded-xl">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-dynamic-edit" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden no-print">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full mx-4 p-6 sm:p-8 space-y-6">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <h3 id="modal-edit-title" class="text-lg font-bold text-slate-900">Form</h3>
+                <button onclick="closeDynamicEditModal()" class="text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div id="modal-edit-body" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <footer class="bg-slate-900 text-white mt-auto pt-12 pb-8 border-t border-slate-800 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full overflow-hidden bg-blue-900 flex items-center justify-center text-white border border-amber-400">
+                    <img id="footer-logo-img" src="https://placehold.co/100x100/1e293b/fbbf24?text=LOGO" alt="Logo" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Gereja GKPPD Lae Langge</h3>
+                    <p class="text-xs text-slate-400 flex items-center gap-1">
+ <a href="https://wa.me" target="6285373896557" rel="noopener noreferrer" class="text-xs text-slate-400 flex items-center gap-1 hover:text-slate-200 transition-colors inline-flex">
+  <svg class="w-4 h-4 fill-current text-[#25D366]" viewBox="0 0 24 24" xmlns="http://w3.org">
+    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.623-1.023-5.09-2.885-6.956C16.528 2.008 14.069.989 11.45.989c-5.438 0-9.863 4.374-9.867 9.801-.002 1.73.457 3.419 1.328 4.921l-.943 3.442 3.54-.919zM17.51 14.7c-.287-.144-1.695-.838-1.955-.934-.26-.096-.45-.144-.64.144-.19.287-.736.934-.903 1.126-.167.192-.334.215-.62.072-.287-.144-1.21-.447-2.306-1.427-.853-.76-1.43-1.7-1.597-1.987-.167-.287-.018-.441.126-.583.13-.127.287-.335.43-.503.144-.168.192-.287.287-.479.096-.192.048-.36-.024-.503-.072-.144-.64-1.543-.877-2.119-.23-.554-.464-.48-.64-.489-.164-.008-.353-.01-.542-.01-.19 0-.498.072-.76.36-.26.287-.992.97-9.92 2.37 0 1.4-.736 2.754-1.59 3.878-1.557 2.042-4.702 3.198-7.543 4.436-.95.414-1.9.615-2.65.503-.84-.125-2.572-.736-3.79-1.42-.99-.558-1.09-1.14-1.09-1.68 0-.47.25-.79.25-.79z"/>
+  </svg>
+  <span>WhatsApp</span>
+</a>
+
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-amber-400"></i>
+                <span>Lae Langge, Desa Laelangge Nmuseng, Kec. STTU Julu, Kab. Pakpak Bharat</span>
+            </div>
+            <div class="flex justify-start md:justify-end gap-3">
+                <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-600 flex items-center justify-center transition text-xs"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-600 flex items-center justify-center transition text-xs"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-600 flex items-center justify-center transition text-xs"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
+            &copy; 2026 Gereja GKPPD Lae Langge. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        let appData = JSON.parse(localStorage.getItem('gkppd_app_data')) || {
+            logoUrl: 'https://placehold.co/100x100/1e293b/fbbf24?text=GKPPD',
+            statistik: {
+                jiwa: 345,
+                kk: 85,
+                asm: 75,
+                pemuda: 90,
+                bapak: 80,
+                ibu: 100,
+                lansia: 25,
+                baptisTahun: 12,
+                sidi: 15,
+                nikah: 4
+            },
+            berita: [
+                { 
+                    id: 1, 
+                    tanggal: '14 April 2026', 
+                    judul: 'Perayaan HUT ke-50 Gereja GKPPD Lae Langge', 
+                    deskripsi: 'Berita terbaru mengenai persiapan acara perayaan ulang tahun gereja yang ke-50...', 
+                    isiLengkap: 'Jemaat Gereja GKPPD Lae Langge bersiap menyambut perayaan Hari Ulang Tahun (HUT) yang ke-50 dengan penuh sukacita.\n\nBerbagai rangkaian kegiatan rohani dan sosial telah disiapkan oleh panitia pelaksana, termasuk bazar amal, kunjungan kasih ke jemaat lansia, serta ibadah syukur raya yang akan dihadiri oleh seluruh unsur pimpinan gereja dan undangan khusus.\n\nMari seluruh jemaat mengambil bagian dan mendukung doa agar seluruh rangkaian perayaan ini berjalan dengan lancar dan mendatangkan kemuliaan bagi nama Tuhan.\n\nKegiatan puncak akan dilaksanakan pada akhir pekan ini bertempat di gedung utama gereja.' 
+                }
+            ],
+            jadwal: [
+                { id: 1, nama: 'Ibadah Umum Pagi', ket: 'Bahasa Pakpak', waktu: '08:00 WIB' }
+            ],
+            renungan: { ayat: 'Mazmur 23:1-3', judul: 'Tuhan Adalah Gembalaku', isi: 'Renungan harian hari ini mengingatkan kita...' },
+            transaksi: [
+                { tanggal: '05-01-2026', keterangan: 'Saldo Awal Bulan', jenis: 'Operasional', jumlah: 1500000, kategori: 'Operasional' }
+            ]
+        };
+
+        let isAdminLoggedIn = localStorage.getItem('gkppd_admin_logged') === 'true';
+
+        function saveData() {
+            localStorage.setItem('gkppd_app_data', JSON.stringify(appData));
+            renderAll();
+        }
+
+        function formatRupiah(angka) {
+            return 'Rp ' + angka.toLocaleString('id-ID');
+        }
+
+        function renderAll() {
+            const logoImg = document.getElementById('app-logo-img');
+            if (logoImg) logoImg.src = appData.logoUrl;
+
+            const footerLogoImg = document.getElementById('footer-logo-img');
+            if (footerLogoImg) footerLogoImg.src = appData.logoUrl;
+
+            // Render Statistik dengan pengecekan elemen aman
+            const st = appData.statistik || { jiwa: 0, kk: 0, asm: 0, pemuda: 0, bapak: 0, ibu: 0, lansia: 0, baptisTahun: 0, sidi: 0, nikah: 0 };
+            
+            const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
+            setVal('stat-jiwa', st.jiwa);
+            setVal('stat-kk', st.kk);
+            setVal('stat-asm', st.asm);
+            setVal('stat-pemuda', st.pemuda);
+            setVal('stat-bapak', st.bapak + ' Orang');
+            setVal('stat-ibu', st.ibu + ' Orang');
+            setVal('stat-lansia', st.lansia + ' Orang');
+            setVal('stat-baptis-tahun', st.baptisTahun + ' Jiwa');
+            setVal('stat-sidi', st.sidi + ' Orang');
+            setVal('stat-nikah', st.nikah + ' Pasang');
+
+            // Berita
+            const cb = document.getElementById('container-berita');
+            if (cb) {
+                cb.innerHTML = '';
+                appData.berita.forEach(item => {
+                    let adminAction = isAdminLoggedIn ? `
+                        <div class="mt-2 flex gap-2 no-print" onclick="event.stopPropagation()">
+                            <button onclick="openEditBeritaModal(${item.id})" class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-semibold hover:bg-blue-100"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <button onclick="hapusBerita(${item.id})" class="text-[11px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded font-semibold hover:bg-rose-100"><i class="fa-solid fa-trash"></i> Hapus</button>
+                        </div>
+                    ` : '';
+
+                    cb.innerHTML += `
+                        <div onclick="bukaDetailBerita(${item.id})" class="flex gap-4 items-start pb-4 border-b border-slate-100 cursor-pointer group hover:bg-slate-50/80 p-2 rounded-xl transition">
+                            <img src="https://placehold.co/80x80/cbd5e1/475569?text=Berita" class="w-16 h-16 rounded-xl object-cover flex-shrink-0 group-hover:scale-105 transition" alt="Berita">
+                            <div class="flex-grow">
+                                <span class="text-[10px] text-amber-700 font-semibold">${item.tanggal || 'Terbaru'}</span>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-800 group-hover:text-blue-900 transition">${item.judul}</h4>
+                                <p class="text-xs text-slate-500 mt-1 line-clamp-2">${item.deskripsi}</p>
+                                ${adminAction}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Jadwal
+            const cj = document.getElementById('container-jadwal');
+            if (cj) {
+                cj.innerHTML = '';
+                appData.jadwal.forEach(item => {
+                    let adminActionJadwal = isAdminLoggedIn ? `
+                        <div class="mt-2 flex gap-2">
+                            <button onclick="openEditJadwalModal(${item.id})" class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-semibold hover:bg-blue-100"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <button onclick="hapusJadwal(${item.id})" class="text-[11px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded font-semibold hover:bg-rose-100"><i class="fa-solid fa-trash"></i> Hapus</button>
+                        </div>
+                    ` : '';
+
+                    cj.innerHTML += `
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-between">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="font-semibold text-slate-800">${item.nama}</p>
+                                    <p class="text-xs text-slate-500">${item.ket}</p>
+                                </div>
+                                <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">${item.waktu}</span>
+                            </div>
+                            ${adminActionJadwal}
+                        </div>
+                    `;
+                });
+            }
+
+            // Renungan
+            const cr = document.getElementById('container-renungan');
+            if (cr) {
+                cr.innerHTML = `
+                    <span class="text-xs font-medium text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full">${appData.renungan.ayat}</span>
+                    <h4 class="font-bold text-slate-800 text-sm">${appData.renungan.judul}</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">${appData.renungan.isi}</p>
+                `;
+            }
+
+            renderKeuangan();
+
+            // Atur Hak Akses Visibilitas Tombol
+            const btnTambahBerita = document.getElementById('btn-tambah-berita');
+            const btnTambahJadwal = document.getElementById('btn-tambah-jadwal');
+            const btnEditRenungan = document.getElementById('btn-edit-renungan');
+            const btnEditStatistik = document.getElementById('btn-edit-statistik');
+            const adminBtnText = document.getElementById('admin-btn-text');
+            const adminIconLock = document.getElementById('admin-icon-lock');
+            const lockedBaptis = document.getElementById('locked-baptis');
+            const contentBaptis = document.getElementById('content-baptis');
+            const lockedKeuangan = document.getElementById('locked-keuangan');
+            const contentKeuangan = document.getElementById('content-keuangan');
+            const lockedSurat = document.getElementById('locked-surat');
+            const contentSurat = document.getElementById('content-surat');
+
+            if (isAdminLoggedIn) {
+                if(btnTambahBerita) btnTambahBerita.classList.remove('hidden');
+                if(btnTambahJadwal) btnTambahJadwal.classList.remove('hidden');
+                if(btnEditRenungan) btnEditRenungan.classList.remove('hidden');
+                if(btnEditStatistik) btnEditStatistik.classList.remove('hidden');
+                if(adminBtnText) adminBtnText.innerText = 'Admin Aktif';
+                if(adminIconLock) adminIconLock.className = 'fa-solid fa-unlock-keyhole text-amber-400';
+
+                if(lockedBaptis) lockedBaptis.classList.add('hidden');
+                if(contentBaptis) contentBaptis.classList.remove('hidden');
+                if(lockedKeuangan) lockedKeuangan.classList.add('hidden');
+                if(contentKeuangan) contentKeuangan.classList.remove('hidden');
+                if(lockedSurat) lockedSurat.classList.add('hidden');
+                if(contentSurat) contentSurat.classList.remove('hidden');
+            } else {
+                if(btnTambahBerita) btnTambahBerita.classList.add('hidden');
+                if(btnTambahJadwal) btnTambahJadwal.classList.add('hidden');
+                if(btnEditRenungan) btnEditRenungan.classList.add('hidden');
+                if(btnEditStatistik) btnEditStatistik.classList.add('hidden');
+                if(adminBtnText) adminBtnText.innerText = 'Admin Panel';
+                if(adminIconLock) adminIconLock.className = 'fa-solid fa-lock';
+
+                if(lockedBaptis) lockedBaptis.classList.remove('hidden');
+                if(contentBaptis) contentBaptis.classList.add('hidden');
+                if(lockedKeuangan) lockedKeuangan.classList.remove('hidden');
+                if(contentKeuangan) contentKeuangan.classList.add('hidden');
+                if(lockedSurat) lockedSurat.classList.remove('hidden');
+                if(contentSurat) contentSurat.classList.add('hidden');
+            }
+        }
+
+        // --- BUKA DETAIL BERITA LENGKAP ---
+        function bukaDetailBerita(id) {
+            const berita = appData.berita.find(b => b.id === id);
+            if(!berita) return;
+            document.getElementById('detail-berita-tanggal').innerText = berita.tanggal || 'Terbaru';
+            document.getElementById('detail-berita-judul').innerText = berita.judul;
+            document.getElementById('detail-berita-isi').innerText = berita.isiLengkap || berita.deskripsi;
+            document.getElementById('detail-berita-img').src = 'https://placehold.co/600x300/1e293b/fbbf24?text=' + encodeURIComponent(berita.judul);
+            document.getElementById('modal-detail-berita').classList.remove('hidden');
+        }
+
+        function closeDetailBerita() {
+            document.getElementById('modal-detail-berita').classList.add('hidden');
+        }
+
+        // --- ADMIN: EDIT STATISTIK JEMAAT ---
+        function openEditStatistikModal() {
+            if(!isAdminLoggedIn) return;
+            const st = appData.statistik || {};
+            document.getElementById('modal-edit-title').innerText = 'Update Data Statistik Jemaat';
+            document.getElementById('modal-edit-body').innerHTML = `
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Total Jiwa:</label>
+                        <input type="number" id="edit-stat-jiwa" value="${st.jiwa || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Kepala Keluarga (KK):</label>
+                        <input type="number" id="edit-stat-kk" value="${st.kk || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Anak Sekolah Minggu:</label>
+                        <input type="number" id="edit-stat-asm" value="${st.asm || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Pemuda / Remaja:</label>
+                        <input type="number" id="edit-stat-pemuda" value="${st.pemuda || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Kaum Bapak:</label>
+                        <input type="number" id="edit-stat-bapak" value="${st.bapak || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Kaum Ibu:</label>
+                        <input type="number" id="edit-stat-ibu" value="${st.ibu || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Lansia:</label>
+                        <input type="number" id="edit-stat-lansia" value="${st.lansia || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Baptis (Tahun Ini):</label>
+                        <input type="number" id="edit-stat-baptis" value="${st.baptisTahun || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Sidi:</label>
+                        <input type="number" id="edit-stat-sidi" value="${st.sidi || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Nikah:</label>
+                        <input type="number" id="edit-stat-nikah" value="${st.nikah || 0}" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+                    </div>
+                </div>
+                <button onclick="saveStatistikEdit()" class="w-full mt-4 py-3 bg-blue-900 text-white font-semibold rounded-xl text-sm">Simpan Data Statistik</button>
+            `;
+            document.getElementById('modal-dynamic-edit').classList.remove('hidden');
+        }
+
+        function saveStatistikEdit() {
+            appData.statistik = {
+                jiwa: parseInt(document.getElementById('edit-stat-jiwa').value) || 0,
+                kk: parseInt(document.getElementById('edit-stat-kk').value) || 0,
+                asm: parseInt(document.getElementById('edit-stat-asm').value) || 0,
+                pemuda: parseInt(document.getElementById('edit-stat-pemuda').value) || 0,
+                bapak: parseInt(document.getElementById('edit-stat-bapak').value) || 0,
+                ibu: parseInt(document.getElementById('edit-stat-ibu').value) || 0,
+                lansia: parseInt(document.getElementById('edit-stat-lansia').value) || 0,
+                baptisTahun: parseInt(document.getElementById('edit-stat-baptis').value) || 0,
+                sidi: parseInt(document.getElementById('edit-stat-sidi').value) || 0,
+                nikah: parseInt(document.getElementById('edit-stat-nikah').value) || 0
+            };
+            saveData();
+            closeDynamicEditModal();
+            showToast('Statistik jemaat berhasil diperbarui!');
+        }
+
+        function renderKeuangan() {
+            const tbody = document.getElementById('tabel-transaksi');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            let tp = 0, tk = 0;
+            appData.transaksi.forEach(item => {
+                if (item.jenis === 'Pemasukan') tp += item.jumlah;
+                if (item.jenis === 'Pengeluaran') tk += item.jumlah;
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="py-3 text-slate-600">${item.tanggal}</td>
+                        <td class="py-3 font-medium text-slate-800">${item.keterangan}</td>
+                        <td class="py-3 text-slate-500">${item.jenis}</td>
+                        <td class="py-3 font-semibold ${item.jenis === 'Pengeluaran' ? 'text-rose-600' : 'text-emerald-600'}">${item.jenis === 'Pengeluaran' ? '-' : '+'}${formatRupiah(item.jumlah)}</td>
+                        <td class="py-3"><span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded text-xs">${item.kategori}</span></td>
+                    </tr>
+                `;
+            });
+            const sp = document.getElementById('stat-pemasukan');
+            const sk = document.getElementById('stat-pengeluaran');
+            if(sp) sp.innerText = '+' + formatRupiah(tp);
+            if(sk) sk.innerText = '-' + formatRupiah(tk);
+        }
+
+        // --- ADMIN: TAMBAH & EDIT BERITA ---
+        function openTambahBeritaModal() {
+            if(!isAdminLoggedIn) return;
+            document.getElementById('modal-edit-title').innerText = 'Tambah Berita Baru';
+            document.getElementById('modal-edit-body').innerHTML = `
+                <p class="text-xs text-slate-500 mb-1">Tanggal Berita:</p>
+                <input type="text" id="form-berita-tgl" value="15 April 2026" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3">
+                <p class="text-xs text-slate-500 mb-1">Judul Berita:</p>
+                <input type="text" id="form-berita-judul" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3" placeholder="Judul berita...">
+                <p class="text-xs text-slate-500 mb-1">Ringkasan (Tampil di Depan):</p>
+                <textarea id="form-berita-desc" rows="2" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3" placeholder="Ringkasan singkat..."></textarea>
+                <p class="text-xs text-slate-500 mb-1">Isi Lengkap Berita:</p>
+                <textarea id="form-berita-isi" rows="5" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-4" placeholder="Tulis isi lengkap berita di sini..."></textarea>
+                <button onclick="simpanBeritaBaru()" class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl text-sm hover:bg-emerald-700 transition">Simpan Berita Baru</button>
+            `;
+            document.getElementById('modal-dynamic-edit').classList.remove('hidden');
+        }
+
+        function simpanBeritaBaru() {
+            const tanggal = document.getElementById('form-berita-tgl').value;
+            const judul = document.getElementById('form-berita-judul').value;
+            const desc = document.getElementById('form-berita-desc').value;
+            const isiLengkap = document.getElementById('form-berita-isi').value || desc;
+            if(!judul || !desc) { showToast('Judul dan ringkasan harus diisi!'); return; }
+            const newId = appData.berita.length > 0 ? Math.max(...appData.berita.map(b => b.id)) + 1 : 1;
+            appData.berita.unshift({ id: newId, tanggal: tanggal, judul: judul, deskripsi: desc, isiLengkap: isiLengkap });
+            saveData(); closeDynamicEditModal(); showToast('Berita berhasil ditambahkan!');
+        }
+
+        function openEditBeritaModal(id) {
+            if(!isAdminLoggedIn) return;
+            const berita = appData.berita.find(b => b.id === id);
+            if(!berita) return;
+            document.getElementById('modal-edit-title').innerText = 'Edit Berita';
+            document.getElementById('modal-edit-body').innerHTML = `
+                <p class="text-xs text-slate-500 mb-1">Tanggal Berita:</p>
+                <input type="text" id="edit-berita-tgl" value="${berita.tanggal || ''}" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3">
+                <p class="text-xs text-slate-500 mb-1">Judul Berita:</p>
+                <input type="text" id="edit-berita-judul" value="${berita.judul}" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3">
+                <p class="text-xs text-slate-500 mb-1">Ringkasan:</p>
+                <textarea id="edit-berita-desc" rows="2" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3">${berita.deskripsi}</textarea>
+                <p class="text-xs text-slate-500 mb-1">Isi Lengkap Berita:</p>
+                <textarea id="edit-berita-isi" rows="5" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-4">${berita.isiLengkap || berita.deskripsi}</textarea>
+                <button onclick="updateBerita(${berita.id})" class="w-full py-3 bg-blue-900 text-white font-semibold rounded-xl text-sm">Simpan Perubahan</button>
+            `;
+            document.getElementById('modal-dynamic-edit').classList.remove('hidden');
+        }
+
+        function updateBerita(id) {
+            const berita = appData.berita.find(b => b.id === id);
+            if(berita) {
+                berita.tanggal = document.getElementById('edit-berita-tgl').value;
+                berita.judul = document.getElementById('edit-berita-judul').value;
+                berita.deskripsi = document.getElementById('edit-berita-desc').value;
+                berita.isiLengkap = document.getElementById('edit-berita-isi').value;
+                saveData(); closeDynamicEditModal(); showToast('Berita diperbarui!');
+            }
+        }
+
+        function hapusBerita(id) {
+            if(!isAdminLoggedIn) return;
+            if(confirm('Hapus berita ini?')) {
+                appData.berita = appData.berita.filter(b => b.id !== id);
+                saveData(); showToast('Berita dihapus.');
+            }
+        }
+
+        // --- ADMIN: TAMBAH & EDIT JADWAL ---
+        function openTambahJadwalModal() {
+            if(!isAdminLoggedIn) return;
+            document.getElementById('modal-edit-title').innerText = 'Tambah Jadwal Ibadah Baru';
+            document.getElementById('modal-edit-body').innerHTML = `
+                <p class="text-xs text-slate-500 mb-1">Nama Ibadah:</p>
+                <input type="text" id="form-jadwal-nama" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3" placeholder="Contoh: Ibadah Pemuda">
+                <p class="text-xs text-slate-500 mb-1">Keterangan / Kategori:</p>
+                <input type="text" id="form-jadwal-ket" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3" placeholder="Contoh: Aula Utama">
+                <p class="text-xs text-slate-500 mb-1">Waktu:</p>
+                <input type="text" id="form-jadwal-waktu" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-4" placeholder="Contoh: 18:30 WIB">
+                <button onclick="simpanJadwalBaru()" class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl text-sm">Simpan Jadwal Baru</button>
+            `;
+            document.getElementById('modal-dynamic-edit').classList.remove('hidden');
+        }
+
+        function simpanJadwalBaru() {
+            const nama = document.getElementById('form-jadwal-nama').value;
+            const ket = document.getElementById('form-jadwal-ket').value;
+            const waktu = document.getElementById('form-jadwal-waktu').value;
+            if(!nama || !waktu) { showToast('Nama dan waktu harus diisi!'); return; }
+            const newId = appData.jadwal.length > 0 ? Math.max(...appData.jadwal.map(j => j.id)) + 1 : 1;
+            appData.jadwal.push({ id: newId, nama: nama, ket: ket, waktu: waktu });
+            saveData(); closeDynamicEditModal(); showToast('Jadwal baru ditambahkan!');
+        }
+
+        function openEditJadwalModal(id) {
+            if(!isAdminLoggedIn) return;
+            const jadwal = appData.jadwal.find(j => j.id === id);
+            if(!jadwal) return;
+            document.getElementById('modal-edit-title').innerText = 'Edit Jadwal Ibadah';
+            document.getElementById('modal-edit-body').innerHTML = `
+                <p class="text-xs text-slate-500 mb-1">Nama Ibadah:</p>
+                <input type="text" id="edit-jadwal-nama" value="${jadwal.nama}" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3">
+                <p class="text-xs text-slate-500 mb-1">Keterangan:</p>
+                <input type="text" id="edit-jadwal-ket" value="${jadwal.ket}" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3">
+                <p class="text-xs text-slate-500 mb-1">Waktu:</p>
+                <input type="text" id="edit-jadwal-waktu" value="${jadwal.waktu}" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-4">
+                <button onclick="updateJadwal(${jadwal.id})" class="w-full py-3 bg-blue-900 text-white font-semibold rounded-xl text-sm">Simpan Perubahan</button>
+            `;
+            document.getElementById('modal-dynamic-edit').classList.remove('hidden');
+        }
+
+        function updateJadwal(id) {
+            const jadwal = appData.jadwal.find(j => j.id === id);
+            if(jadwal) {
+                jadwal.nama = document.getElementById('edit-jadwal-nama').value;
+                jadwal.ket = document.getElementById('edit-jadwal-ket').value;
+                jadwal.waktu = document.getElementById('edit-jadwal-waktu').value;
+                saveData(); closeDynamicEditModal(); showToast('Jadwal diperbarui!');
+            }
+        }
+
+        function hapusJadwal(id) {
+            if(!isAdminLoggedIn) return;
+            if(confirm('Hapus jadwal ini?')) {
+                appData.jadwal = appData.jadwal.filter(j => j.id !== id);
+                saveData(); showToast('Jadwal dihapus.');
+            }
+        }
+
+        // --- ADMIN: EDIT RENUNGAN ---
+        function openEditRenunganModal() {
+            if(!isAdminLoggedIn) return;
+            document.getElementById('modal-edit-title').innerText = 'Edit Renungan Harian';
+            document.getElementById('modal-edit-body').innerHTML = `
+                <p class="text-xs text-slate-500 mb-1">Ayat:</p>
+                <input type="text" id="edit-renungan-ayat" value="${appData.renungan.ayat}" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3">
+                <p class="text-xs text-slate-500 mb-1">Judul Renungan:</p>
+                <input type="text" id="edit-renungan-judul" value="${appData.renungan.judul}" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-3">
+                <p class="text-xs text-slate-500 mb-1">Isi Renungan:</p>
+                <textarea id="edit-renungan-isi" rows="4" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 mb-4">${appData.renungan.isi}</textarea>
+                <button onclick="saveRenunganEdit()" class="w-full py-3 bg-blue-900 text-white font-semibold rounded-xl text-sm">Simpan Perubahan</button>
+            `;
+            document.getElementById('modal-dynamic-edit').classList.remove('hidden');
+        }
+
+        function saveRenunganEdit() {
+            appData.renungan.ayat = document.getElementById('edit-renungan-ayat').value;
+            appData.renungan.judul = document.getElementById('edit-renungan-judul').value;
+            appData.renungan.isi = document.getElementById('edit-renungan-isi').value;
+            saveData(); closeDynamicEditModal(); showToast('Renungan diperbarui!');
+        }
+
+        function closeDynamicEditModal() { document.getElementById('modal-dynamic-edit').classList.add('hidden'); }
+
+        // --- CETAK KEUANGAN PDF ---
+        function openCetakKeuanganModal() {
+            if(!isAdminLoggedIn) return;
+            const printLogo = document.getElementById('print-keu-logo');
+            if(printLogo) printLogo.src = appData.logoUrl;
+            document.getElementById('print-keu-periode').innerText = 'Bulan Berjalan 2026';
+            document.getElementById('print-keu-tanggal').innerText = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
+
+            let tp = 0, tk = 0;
+            const ptBody = document.getElementById('print-tabel-transaksi');
+            if(ptBody) {
+                ptBody.innerHTML = '';
+                appData.transaksi.forEach(item => {
+                    if (item.jenis === 'Pemasukan') tp += item.jumlah;
+                    if (item.jenis === 'Pengeluaran') tk += item.jumlah;
+                    ptBody.innerHTML += `
+                        <tr>
+                            <td class="p-2">${item.tanggal}</td>
+                            <td class="p-2 font-medium">${item.keterangan}</td>
+                            <td class="p-2">${item.jenis}</td>
+                            <td class="p-2">${item.kategori}</td>
+                            <td class="p-2 text-right font-semibold ${item.jenis === 'Pengeluaran' ? 'text-rose-600' : 'text-emerald-600'}">${item.jenis === 'Pengeluaran' ? '-' : '+'}${formatRupiah(item.jumlah)}</td>
+                        </tr>
+                    `;
+                });
+            }
+            const ptotp = document.getElementById('print-tot-pemasukan');
+            const ptotk = document.getElementById('print-tot-pengeluaran');
+            if(ptotp) ptotp.innerText = '+' + formatRupiah(tp);
+            if(ptotk) ptotk.innerText = '-' + formatRupiah(tk);
+
+            document.getElementById('modal-cetak-keuangan').classList.remove('hidden');
+        }
+
+        function closeCetakKeuanganModal() {
+            document.getElementById('modal-cetak-keuangan').classList.add('hidden');
+        }
+
+        // Handler Cetak Baptis & Surat
+        function handleBaptisSubmit(event) {
+            event.preventDefault();
+            if(!isAdminLoggedIn) return;
+            const pbLogo = document.getElementById('print-baptis-logo');
+            if(pbLogo) pbLogo.src = appData.logoUrl;
+            document.getElementById('pb-nama').innerText = document.getElementById('baptis-nama').value;
+            
+            const tempatLahir = document.getElementById('baptis-tempat-lahir').value;
+            const tglLahirVal = document.getElementById('baptis-tgl-lahir').value;
+            const formattedTglLahir = tglLahirVal ? new Date(tglLahirVal).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : '-';
+            document.getElementById('pb-tgl-lahir').innerText = `${tempatLahir}, ${formattedTglLahir}`;
+
+            const namaAyah = document.getElementById('baptis-ayah').value;
+            const namaIbu = document.getElementById('baptis-ibu').value;
+            document.getElementById('pb-ayah').innerText = namaAyah;
+            document.getElementById('pb-ibu').innerText = namaIbu;
+
+            document.getElementById('pb-alamat').innerText = document.getElementById('baptis-alamat').value;
+            document.getElementById('pb-telp').innerText = document.getElementById('baptis-telp').value;
+            
+            const tglRencanaVal = document.getElementById('baptis-tgl-rencana').value;
+            document.getElementById('pb-tgl-rencana').innerText = tglRencanaVal ? new Date(tglRencanaVal).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : '-';
+            
+            document.getElementById('pb-ttd-nama').innerText = namaAyah || namaIbu;
+            document.getElementById('pb-tanggal-surat').innerText = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
+
+            document.getElementById('modal-cetak-baptis').classList.remove('hidden');
+            showToast('Surat Permohonan Baptis siap dicetak!');
+        }
+        function closeCetakBaptisModal() { document.getElementById('modal-cetak-baptis').classList.add('hidden'); }
+
+        function handleSuratSubmit(event) {
+            event.preventDefault();
+            if(!isAdminLoggedIn) return;
+            const printLogo = document.getElementById('print-logo');
+            if(printLogo) printLogo.src = appData.logoUrl;
+            document.getElementById('print-judul-surat').innerText = document.getElementById('surat-jenis').value.toUpperCase();
+            document.getElementById('print-nama').innerText = document.getElementById('surat-nama').value;
+            document.getElementById('print-ortu').innerText = document.getElementById('surat-ortu').value;
+            document.getElementById('print-alamat').innerText = document.getElementById('surat-alamat').value;
+            document.getElementById('print-tanggal-surat').innerText = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
+
+            document.getElementById('modal-cetak-surat').classList.remove('hidden');
+            showToast('Surat Keterangan siap dicetak!');
+        }
+        function closeCetakModal() { document.getElementById('modal-cetak-surat').classList.add('hidden'); }
+
+        // Admin & Navigasi
+        function openAdminModal() { isAdminLoggedIn ? document.getElementById('modal-admin-panel').classList.remove('hidden') : document.getElementById('modal-admin-login').classList.remove('hidden'); }
+        function closeAdminModal() { document.getElementById('modal-admin-login').classList.add('hidden'); }
+        function closeAdminPanel() { document.getElementById('modal-admin-panel').classList.add('hidden'); }
+        function verifyAdminLogin() {
+            const passInput = document.getElementById('admin-password-input');
+            if (passInput && passInput.value === 'admin123') {
+                isAdminLoggedIn = true; localStorage.setItem('gkppd_admin_logged', 'true');
+                closeAdminModal(); showToast('Login Admin Berhasil! Semua fitur terbuka.'); renderAll();
+            } else { showToast('Password salah! Gunakan: admin123'); }
+        }
+        function logoutAdmin() {
+            isAdminLoggedIn = false; localStorage.setItem('gkppd_admin_logged', 'false');
+            closeAdminPanel(); showToast('Logout berhasil. Beralih ke mode pengunjung.');
+            switchTab('home'); renderAll();
+        }
+        function saveAdminLogo() {
+            const fileInput = document.getElementById('admin-logo-file');
+            if(fileInput && fileInput.files[0]) {
+                const f = fileInput.files[0];
+                const r = new FileReader();
+                r.onload = function(e) { appData.logoUrl = e.target.result; saveData(); closeAdminPanel(); showToast('Logo diperbarui!'); }
+                r.readAsDataURL(f);
+            }
+        }
+        function openModalKeuangan() {
+            if(!isAdminLoggedIn) return;
+            document.getElementById('modal-keuangan').classList.remove('hidden');
+            const tglInput = document.getElementById('input-tanggal');
+            if(tglInput) tglInput.valueAsDate = new Date();
+        }
+        function closeModalKeuangan() { document.getElementById('modal-keuangan').classList.add('hidden'); }
+        function handleTambahTransaksi(e) {
+            e.preventDefault();
+            if(!isAdminLoggedIn) return;
+            const dateVal = document.getElementById('input-tanggal').value;
+            if(!dateVal) return;
+            const d = dateVal.split('-');
+            appData.transaksi.unshift({
+                tanggal: `${d[2]}-${d[1]}-${d[0]}`,
+                keterangan: document.getElementById('input-keterangan').value,
+                jenis: document.getElementById('input-jenis').value,
+                jumlah: parseFloat(document.getElementById('input-jumlah').value),
+                kategori: document.getElementById('input-kategori').value
+            });
+            saveData(); closeModalKeuangan(); showToast('Transaksi ditambahkan!'); e.target.reset();
+        }
+
+        function switchTab(tabId) {
+            if(!isAdminLoggedIn && tabId !== 'home' && tabId !== 'statistik') {
+                showToast('Fitur ini khusus Admin. Silakan login terlebih dahulu.');
+            }
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const targetTab = document.getElementById('tab-' + tabId);
+            if(targetTab) targetTab.classList.remove('hidden');
+
+            ['home', 'statistik', 'baptis', 'keuangan', 'surat'].forEach(id => {
+                const b = document.getElementById('nav-' + id);
+                if(b) b.className = "px-3 py-2 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-slate-100 transition font-medium";
+            });
+            const ab = document.getElementById('nav-' + tabId);
+            if(ab) ab.className = "px-3 py-2 rounded-lg text-amber-700 bg-amber-50 transition font-semibold";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function toggleMobileMenu() { 
+            const mm = document.getElementById('mobile-menu');
+            if(mm) mm.classList.toggle('hidden'); 
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            const tm = document.getElementById('toast-message');
+            if(!t || !tm) return;
+            tm.innerText = msg;
+            t.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => { t.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+        }
+
+        window.onload = function() { renderAll(); }
+    </script>
+</body>
+</html>
